@@ -1,8 +1,8 @@
 <?php
 /*
 Plugin Name: Post Meta Data
-Plugin URI: 
-Description: 
+Plugin URI: https://github.com/mohdalam392/WP_List_Table-of-wp_postmeta-wordpress-table
+Description: Post Meta Data List (Insert,Update,Delete)
 Author: Mohd Alam
 Version: 1.7.2
 Author URI: 

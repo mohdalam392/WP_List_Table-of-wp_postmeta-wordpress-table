@@ -9,7 +9,13 @@ class PostsMetaData_Menu {
      * Kick-in the class
      */
     public function __construct() {
-        add_action( 'admin_menu', array( $this, 'admin_menu' ) );
+        global $current_user;
+
+        // check captability
+        if($current_user->roles[0]=='administrator'){
+            add_action( 'admin_menu', array( $this, 'admin_menu' ) );
+        }
+        
     }
 
     /**

@@ -23,7 +23,24 @@ function pm_get_all_post_meta( $args = array() ) {
 
     if ( false === $items ) { 
         if(empty($args['s'])){
-            $items = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->prefix . 'postmeta ORDER BY meta_id ' . $args['order'] .' LIMIT ' . $args['offset'] . ', ' . $args['number'] );
+            $query = 'SELECT * FROM ' . $wpdb->prefix . 'postmeta where 1=1 ';
+
+            if(!empty($args['meta_id'])){
+                $query  .='and meta_id="'.$args['meta_id'].'" ';
+            }
+            if(!empty($args['post_id'])){
+                $query  .='and post_id="'.$args['post_id'].'" ';
+            }
+            if(!empty($args['meta_key'])){
+                $query  .='and meta_key="'.$args['meta_key'].'" ';
+            }
+            if(!empty($args['meta_value'])){
+                $query  .='and meta_value="'.$args['meta_value'].'" ';
+            }
+
+            $query  .='ORDER BY meta_id ' . $args['order'] .' LIMIT ' . $args['offset'] . ', ' . $args['number'];
+            
+            $items = $wpdb->get_results( $query );
         }else{
             $items = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->prefix . 'postmeta where post_id like "%'.$args['s'].'%" or meta_key like "%'.$args['s'].'%" or meta_value like "%'.$args['s'].'%" ORDER BY meta_id ' . $args['order'] .' LIMIT ' . $args['offset'] . ', ' . $args['number'] );
         }

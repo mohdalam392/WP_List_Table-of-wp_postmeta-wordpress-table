@@ -142,14 +142,21 @@ class PostsMetaData_List_Table extends \WP_List_Table {
 
     public function extra_tablenav($which)
     {
-        ?>
+        $meta_id = sanitize_text_field( $_POST['meta_id'] );
+        $post_id = sanitize_text_field( $_POST['post_id'] );
+        $meta_key = sanitize_text_field( $_POST['meta_key'] );
+        $meta_value = sanitize_text_field( $_POST['meta_value'] );
+    ?>
         <div class="alignleft actions daterangeactions">
-            <label for="daterange-actions-picker" class="screen-reader-text"><?=__('Filter', 'iw-stats')?></label>
-            <input type="search" name="meta_id" id="meta_id"/>
-            <input type="search" name="post_id" id="post_id"/>
-            <input type="search" name="meta_key" id="meta_key"/>
-            <input type="search" name="meta_value" id="meta_value"/>
+            <form name='searchfilter'>
+                <label for="daterange-actions-picker" class="screen-reader-text"><?=__('Filter', 'iw-stats')?></label>
+                <input type="textfield" name="meta_id" id="meta_id" placeholder="Meta Id" value="<?php echo $meta_id ?>"/>
+                <input type="textfield" name="post_id" id="post_id" placeholder="Post Id" value="<?php echo $post_id ?>"/>
+                <input type="textfield" name="meta_key" id="meta_key" placeholder="Meta Key" value="<?php echo $meta_key ?>"/>
+                <input type="textfield" name="meta_value" id="meta_value" placeholder="Meta Value" value="<?php echo $meta_value ?>"/>
+                <?php wp_nonce_field( '' ); ?>
             <?php submit_button(__('Apply', 'iw-stats'), 'action', 'dodate', false); ?>
+            </form>
         </div>
         <?php
     }
@@ -177,6 +184,14 @@ class PostsMetaData_List_Table extends \WP_List_Table {
      */
     function prepare_items() {
 
+        /*if ( ! isset( $_POST['Post_Submit_Option'] ) ) {
+            return;
+        }*/
+
+        if (!empty($_POST) && ! wp_verify_nonce( $_POST['_wpnonce'], '' ) ) {
+            die( __( 'Are you cheating?', '' ) );
+        }
+
         $columns               = $this->get_columns();
         $hidden                = $this->get_hidden_columns();
         $sortable              = $this->get_sortable_columns();
@@ -199,20 +214,20 @@ class PostsMetaData_List_Table extends \WP_List_Table {
         }
 
         if ( isset( $_REQUEST['s'] ) && !empty( $_REQUEST['s'] ) ) {
-            $args['s'] = $_REQUEST['s'];
+            $args['s'] = sanitize_text_field($_REQUEST['s']);
         }
 
-        if ( isset( $_REQUEST['meta_id'] ) && !empty( $_REQUEST['meta_id'] ) ) {
-            $args['meta_id'] = $_REQUEST['meta_id'];
+        if ( isset( $_POST['meta_id'] ) && !empty( $_POST['meta_id'] ) ) {
+            $args['meta_id'] = sanitize_text_field($_POST['meta_id']);
         }
-        if ( isset( $_REQUEST['post_id'] ) && !empty( $_REQUEST['post_id'] ) ) {
-            $args['post_id'] = $_REQUEST['post_id'];
+        if ( isset( $_POST['post_id'] ) && !empty( $_POST['post_id'] ) ) {
+            $args['post_id'] = sanitize_text_field($_POST['post_id']);
         }
-        if ( isset( $_REQUEST['meta_key'] ) && !empty( $_REQUEST['meta_key'] ) ) {
-            $args['meta_key'] = $_REQUEST['meta_key'];
+        if ( isset( $_POST['meta_key'] ) && !empty( $_POST['meta_key'] ) ) {
+            $args['meta_key'] = sanitize_text_field($_POST['meta_key']);
         }
-        if ( isset( $_REQUEST['post_id'] ) && !empty( $_REQUEST['post_id'] ) ) {
-            $args['meta_value'] = $_REQUEST['meta_value'];
+        if ( isset( $_POST['meta_value'] ) && !empty( $_POST['meta_value'] ) ) {
+            $args['meta_value'] = sanitize_text_field($_POST['meta_value']);
         }
         
         $this->items  = pm_get_all_post_meta( $args );
