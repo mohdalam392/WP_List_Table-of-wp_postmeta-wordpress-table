@@ -4,8 +4,8 @@ Plugin Name: Post Meta Data
 Plugin URI: https://github.com/mohdalam392/WP_List_Table-of-wp_postmeta-wordpress-table
 Description: Post Meta Data List (Insert,Update,Delete)
 Author: Mohd Alam
-Version: 1.7.2
-Author URI: 
+Version: 1.0
+Author URI: http://www.facebook.com/alamdeveloper
 */
 
 ?>
@@ -20,3 +20,4 @@ add_action('init',function(){
 	new PostsMetaData_Menu();
 	/** Post Meta Deta **/
 });
+
